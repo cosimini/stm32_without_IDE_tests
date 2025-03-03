@@ -1,10 +1,16 @@
 # My test building stm32 binaries
 
-Those are my tests tryingto program stm32 based boards without using IDEs.
+Those are my tests trying to program stm32 based boards without using IDEs.
 Successed in running simple code and verified whith gdb everything is fine.
 I'm using st-link at the moment, which still feels too magic to me, will use openocd in the future.
 
-For the time being, the project builds with the bash script build.sh
+For the time being, the project builds with the bash script build.sh, which also starts gdb.
+
+TODOs:
+- [ ] Write a basis and simple hal for the GPIO
+- [ ] Write a configuration for the clock hardware
+- [ ] Try to configure a timer with an associated callback
+- [ ] Try to use the serial interface
 
 ## Useful commands
  - st-util: Conect to the hardware and listen for gdb
