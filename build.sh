@@ -10,3 +10,6 @@ arm-none-eabi-gcc\
 
 # Useful flags
 # --specs=nano.specs\ link with a stdlib provided by the toolkit
+
+# This requires st-utils to be running and to be connected to the host
+arm-none-eabi-gdb --command=gdb-init build/output.o
