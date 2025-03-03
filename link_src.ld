@@ -34,4 +34,5 @@ SECTIONS
     *(.text*)
     . = ALIGN(4);
   } > FLASH
+
 }
