@@ -1,5 +1,10 @@
 #!/usr/bin/fish
 
+# Create build folder
+if not test -d "build"
+  mkdir build
+end
+
 # Flags explaination:
 #  -T link_src.ld      : Link with the specified linker script
 #  -static             : Build a static executable
