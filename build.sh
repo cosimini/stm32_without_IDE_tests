@@ -18,14 +18,14 @@ end
 #  -ggdb               : Enable debugger symbols
 
 arm-none-eabi-gcc\
-  main.c boot.c\
-  -T link_src.ld\
+  src/main.c src/boot.c\
+  -T src/link_src.ld\
   -static\
   --specs=nano.specs\
   -mcpu=cortex-m0plus\
   -mfloat-abi=soft\
   -Os -mthumb -nostdlib -Wall -ggdb\
-  -o ./build/output.o
+  -o build/output.o
 
 # This requires st-utils to be running and connected to the host
 arm-none-eabi-gdb --command=gdb-init build/output.o
