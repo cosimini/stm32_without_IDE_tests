@@ -29,10 +29,8 @@ SECTIONS
     *(.reset_vector)
     . = ALIGN(4);
   } > FLASH
-
   .text : {
     *(.text*)
     . = ALIGN(4);
   } > FLASH
-
 }

@@ -5,6 +5,8 @@ if not test -d "build"
   mkdir build
 end
 
+rm build/*
+
 # Flags explaination:
 #  -T link_src.ld      : Link with the specified linker script
 #  -static             : Build a static executable
@@ -18,14 +20,20 @@ end
 #  -ggdb               : Enable debugger symbols
 
 arm-none-eabi-gcc\
-  src/main.c src/boot.c\
+  src/*.c\
   -T src/link_src.ld\
-  -static\
-  --specs=nano.specs\
+  -Wall -Wextra -Werror -ggdb\
   -mcpu=cortex-m0plus\
-  -mfloat-abi=soft\
-  -Os -mthumb -nostdlib -Wall -ggdb\
+  -mfloat-abi=soft -mthumb -nostdlib\
   -o build/output.o
 
-# This requires st-utils to be running and connected to the host
-arm-none-eabi-gdb --command=gdb-init build/output.o
+#  Flags I'm not using
+#
+#  -Os\
+#  --specs=nano.specs\
+#  -static\
+
+if test "$status" -eq 0
+  # This requires st-utils to be running and connected to the host
+  arm-none-eabi-gdb --command=gdb-init build/output.o
+end

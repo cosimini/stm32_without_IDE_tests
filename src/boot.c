@@ -1,15 +1,11 @@
 #include <stdint.h>
 
-// TODO: Right now I'm hardcoding the RAM size, this is not convenient. It is better to use the values provided by the linker.
-// At the moment I'm unable to do so because the compiler is complaining about something.
 //extern unsigned int _stack_reset_value;
-const uint32_t RAM_END = 0x20002000;
+const uint32_t RAM_END = 0x20001FFF;
 
-extern int main(void); // Forward declare the main()
-
-// Useful functions to fill the reset vector
-void trap(void) { while(1); }  // Trap the execution indefietely
-void noop(void) {}             // Do nothing
+int main(void);  // Forward declare the main()
+void trap(void); // Trap the execution indefietely
+void noop(void); // Do nothing
 
 // The vector table
 uint32_t __attribute__((section(".reset_vector"))) isr_vector[] = {
@@ -62,3 +58,8 @@ uint32_t __attribute__((section(".reset_vector"))) isr_vector[] = {
   (uint32_t) noop,     // 46 - IRQ 30
   (uint32_t) noop,     // 47 - IRQ 31
 };
+
+// Useful functions to fill the reset vector
+void trap(void) { while(1); }  // Trap the execution indefietely
+void noop(void) {}             // Do nothing
+
