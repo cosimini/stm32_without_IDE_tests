@@ -29,8 +29,21 @@ SECTIONS
     *(.reset_vector)
     . = ALIGN(4);
   } > FLASH
+
   .text : {
     *(.text*)
+    *(.rodata)
     . = ALIGN(4);
   } > FLASH
+
+  .data : {
+    *(.data)
+    . = ALIGN(4);
+  } > SRAM AT> FLASH
+
+  .bss : {
+    *(.bss)
+    . = ALIGN(4);
+  } > SRAM
+
 }

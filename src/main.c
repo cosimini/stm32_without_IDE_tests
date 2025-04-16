@@ -10,8 +10,14 @@ void setLED(bool state);
 void USARTwrite(char c);
 void clearTIM2Interrupt(void);
 
+// The good, old, global variable
+bool ledStatus;
+int IRQsCounter;
+
 void IRQ15(void) {
-  setLED(false);
+  ledStatus = !ledStatus;
+  IRQsCounter++;
+  setLED(ledStatus);
   char message[] = "IRQ 15 called\r\n";
   for(uint32_t k = 0; k < sizeof(message); k++) USARTwrite(message[k]);
   clearTIM2Interrupt();
@@ -24,7 +30,8 @@ int main(void) {
   initUSART();
   initTIM2();
   // Send greetings over usart
-  setLED(true);
+  ledStatus = false;
+  IRQsCounter = 0;
   char greet[] = "Hello, word!\r\n";
   for(uint32_t k = 0; k < sizeof(greet); k++) USARTwrite(greet[k]);
   while(1) { /* MAIN INFINITE LOOP */ }
