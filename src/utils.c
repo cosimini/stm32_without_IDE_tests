@@ -11,6 +11,18 @@ bool setbit32(uint32_t* target, int index, int value) {
   *target = (*target & ~(0b1 << index)) | value << index;
   return true;
 }
+bool setbit16(uint16_t* target, int index, int value) {
+  if(index < 0 || index > 16) return false;
+  if(!(value == 0 || value == 1)) return false;
+  *target = (*target & ~(0b1 << index)) | value << index;
+  return true;
+}
+bool setbit8(uint8_t* target, int index, int value) {
+  if(index < 0 || index > 8) return false;
+  if(!(value == 0 || value == 1)) return false;
+  *target = (*target & ~(0b1 << index)) | value << index;
+  return true;
+}
 
 // Use the regConf structure defined in header
 bool setConf(regConf* conf, int index, int value) {

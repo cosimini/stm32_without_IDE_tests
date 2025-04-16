@@ -7,7 +7,7 @@
 #define USART2_TDR 0x0028
 #define USART2_ISR 0x001C
 
-void setUSART(void) {
+void initUSART(void) {
   // USART2_CR1
   regConf conf = {.reg = ((uint32_t*) (USART2_OFFSET + 0x0000)), .idx = 0, .val = 0};
   setConf(&conf, 28, 0); // 1. Set word length
@@ -32,7 +32,7 @@ void setUSART(void) {
   applyConf(&conf);
 }
 
-void USART_send(char c) {
+void USARTwrite(char c) {
   uint32_t* CR1 = (uint32_t*) (USART2_OFFSET);
   char* TDR = (char*) (USART2_OFFSET + USART2_TDR);
   volatile uint32_t* ISR = (uint32_t*) (USART2_OFFSET + USART2_ISR); // volatile is needed if -Os is enabled

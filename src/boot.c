@@ -3,9 +3,11 @@
 //extern unsigned int _stack_reset_value;
 const uint32_t RAM_END = 0x20001FFF;
 
-int main(void);  // Forward declare the main()
-void trap(void); // Trap the execution indefietely
-void noop(void); // Do nothing
+// Forward declarations
+int main(void);
+void trap(void);
+void noop(void);
+void IRQ15(void);
 
 // The vector table
 uint32_t __attribute__((section(".reset_vector"))) isr_vector[] = {
@@ -40,7 +42,7 @@ uint32_t __attribute__((section(".reset_vector"))) isr_vector[] = {
   (uint32_t) noop,     // 28 - IRQ 12
   (uint32_t) noop,     // 29 - IRQ 13
   (uint32_t) noop,     // 30 - IRQ 14
-  (uint32_t) noop,     // 31 - IRQ 15
+  (uint32_t) IRQ15,    // 31 - IRQ 15
   (uint32_t) noop,     // 32 - IRQ 16
   (uint32_t) noop,     // 33 - IRQ 17
   (uint32_t) noop,     // 34 - IRQ 18

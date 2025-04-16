@@ -1,22 +1,31 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-void setClock();
+void initClock();
 void initGPIO();
+void initUSART();
+void initTIM2(void);
+
 void setLED(bool state);
-void setUSART();
-void USART_send();
+void USARTwrite(char c);
+void clearTIM2Interrupt(void);
+
+void IRQ15(void) {
+  setLED(false);
+  char message[] = "IRQ 15 called\r\n";
+  for(uint32_t k = 0; k < sizeof(message); k++) USARTwrite(message[k]);
+  clearTIM2Interrupt();
+}
 
 int main(void) {
   // Configure hardware
-  setClock();
+  initClock();
   initGPIO();
-  setUSART();
+  initUSART();
+  initTIM2();
   // Send greetings over usart
-  char greet[] = "Hello, word!\n";
-  for(uint32_t k = 0; k < sizeof(greet); k++) USART_send(greet[k]);
-  // Turn on LED
   setLED(true);
-  // Busy loop for eternity
-  while(1); // Trap execution at the end of main
+  char greet[] = "Hello, word!\r\n";
+  for(uint32_t k = 0; k < sizeof(greet); k++) USARTwrite(greet[k]);
+  while(1) { /* MAIN INFINITE LOOP */ }
 }

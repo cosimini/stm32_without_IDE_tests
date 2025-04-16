@@ -10,7 +10,7 @@
 #define RCC_ABPENR1 0x003C
 #define RCC_CCIPR 0x0054
 
-void setClock(void) {
+void initClock(void) {
   // RCC_CR
   regConf conf = {.reg = ((uint32_t*) (RCC_OFFSET)), .idx = 0, .val = 0};
   setConf(&conf,  8, 1); // Enable HSI 16
