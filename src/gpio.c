@@ -17,19 +17,7 @@
 #define GPIO_ALTFUNR 0x0020
 
 void initGPIO() {
-  // Port C
-  regConf conf = {(uint32_t*) (GPIOC_OFFSET + GPIO_MODESET), 0, 0};
-  setConf(&conf, 12, 1); // Output
-  setConf(&conf, 13, 0); // Output
-  applyConf(&conf);
-  conf.reg =(uint32_t*) (GPIOC_OFFSET + GPIO_TYPESET);
-  setConf(&conf, 6 ,0);
-  applyConf(&conf);
-  conf.reg = (uint32_t*) (GPIOC_OFFSET + GPIO_PULLSET);
-  setConf(&conf, 6, 0); // No push/pull
-  setConf(&conf, 7, 0); // No push/pull
-  applyConf(&conf);
-
+  regConf conf = {0, 0, 0};
   // Port A - PA2 and PA3's AF1 is USART2
   conf.reg = (uint32_t*) (GPIOA_OFFSET + GPIO_MODESET);
   setConf(&conf, 4, 0);  // Set pin to use AF
@@ -46,6 +34,19 @@ void initGPIO() {
   conf.reg = (uint32_t*) (GPIOA_OFFSET + GPIO_ALTFUNR);
   setConf(&conf,  8, 1); // Select AF1
   setConf(&conf, 12, 1); // Select AF1
+  applyConf(&conf);
+
+  // Port C
+  conf.reg = (uint32_t*) (GPIOC_OFFSET + GPIO_MODESET);
+  setConf(&conf, 12, 1); // Output
+  setConf(&conf, 13, 0); // Output
+  applyConf(&conf);
+  conf.reg =(uint32_t*) (GPIOC_OFFSET + GPIO_TYPESET);
+  setConf(&conf, 6 ,0);
+  applyConf(&conf);
+  conf.reg = (uint32_t*) (GPIOC_OFFSET + GPIO_PULLSET);
+  setConf(&conf, 6, 0); // No push/pull
+  setConf(&conf, 7, 0); // No push/pull
   applyConf(&conf);
 }
 

@@ -13,6 +13,7 @@ TODOs:
 - [X] Try to use the serial interface
 - [ ] Use DMA controller
 - [ ] Write proper initialization
+- [ ] Use OpenOCD for debugging too
 
 ## Useful commands
  - st-util: Conect to the hardware and listen for gdb
