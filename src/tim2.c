@@ -12,24 +12,20 @@ void clearTIM2Interrupt(void) {
   // Reset the interrupt in the interrupts register
   resetInterrupt(15);
   // Reset the interrupt bits in the timer status register
-  uint32_t* timerStatusRegister = (uint32_t*) (TIM2_OFFSET + TIM2_SR);
-  // Only a couple of bits need to be set to 0
-  // But being the register initialized to 0, this was the easier
-  *timerStatusRegister = 0;
+  // TODO: Only a couple of bits need to be set to 0
+  // But being the register initialized to 0, this was easier
+  *(uint32_t*) (TIM2_OFFSET + TIM2_SR) = 0;
 }
+
 void initTIM2(void) {
   // Set the timer prescaler
-  uint16_t* prescaler = (uint16_t*) (TIM2_OFFSET + TIM2_PSC);
-  *prescaler = (uint16_t) 16;
+  *(uint16_t*) (TIM2_OFFSET + TIM2_PSC) = (uint16_t) 16;
   // Enable interrupt
-  uint16_t* inter_en  = (uint16_t*) (TIM2_OFFSET + TIM2_DIER);
-  setbit16(inter_en, 0, 1);
-  setbit16(inter_en, 6, 1);
+  *(uint16_t*) (TIM2_OFFSET + TIM2_DIER) |= 1;
   // Auto reload value
-  uint32_t* autoreload_value = (uint32_t*) (TIM2_OFFSET + TIM2_ARR);
-  *autoreload_value = (uint32_t) 1000000;
+  *(uint32_t*) (TIM2_OFFSET + TIM2_ARR) = (uint32_t) 1000000;
   // Enable counter (CEN, bit 0)
-  uint16_t* control_reg_1 = (uint16_t*) (TIM2_OFFSET + TIM2_CR1);
-  setbit16(control_reg_1, 0, 1);
+  *(uint16_t*) (TIM2_OFFSET + TIM2_CR1) |= 1;
+  // Iterrupts need to be clean in order for the NVIC to operate
   clearTIM2Interrupt();
 }

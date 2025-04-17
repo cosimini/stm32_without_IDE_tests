@@ -36,7 +36,7 @@ void initGPIO() {
   setConf(&conf, 12, 1); // Select AF1
   applyConf(&conf);
 
-  // Port C
+  // Port C - PC6 is connected to the user LED
   conf.reg = (uint32_t*) (GPIOC_OFFSET + GPIO_MODESET);
   setConf(&conf, 12, 1); // Output
   setConf(&conf, 13, 0); // Output
@@ -50,8 +50,10 @@ void initGPIO() {
   applyConf(&conf);
 }
 
+// Set/unset PC6 depending on bool 'state'
 void setLED(bool state) {
-  regConf conf = {(uint32_t*) (GPIOC_OFFSET + GPIO_OUT_SET), 0, 0};
-  setConf(&conf, 6, state ? 1 : 0);
-  applyConf(&conf);
+  if(state) 
+    *(uint32_t*) (GPIOC_OFFSET + GPIO_OUT_SET) |= (1 << 6);
+  else
+    *(uint32_t*) (GPIOC_OFFSET + GPIO_OUT_SET) &= ~(1 << 6);
 }

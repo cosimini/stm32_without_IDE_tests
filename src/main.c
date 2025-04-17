@@ -22,7 +22,7 @@ void IRQ15(void) {
   ledStatus = !ledStatus;
   IRQsCounter++;
   setLED(ledStatus);
-  char message[] = "IRQ 15 called\r\n";
+  char message[] = "beep\r\n";
   for(uint32_t k = 0; k < sizeof(message); k++) USARTwrite(message[k]);
   clearTIM2Interrupt();
 }
@@ -34,9 +34,10 @@ int main(void) {
   initGPIO();
   initUSART();
   initTIM2();
-  // Send greetings over usart
-  ledStatus = false;
+  // Init global variables
+  ledStatus = true;
   IRQsCounter = 0;
+  // Send greetings over usart
   char greet[] = "Hello, word!\r\n";
   for(uint32_t k = 0; k < sizeof(greet); k++) USARTwrite(greet[k]);
   while(1) { /* MAIN INFINITE LOOP */ }
