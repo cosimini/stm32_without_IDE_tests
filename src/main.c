@@ -1,19 +1,23 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-void initClock();
-void initGPIO();
-void initUSART();
+// Forward declare initialization functions
+void initClock(void);
+void initCore(void);
+void initGPIO(void);
+void initUSART(void);
 void initTIM2(void);
 
+// Forward declaration of used functions
 void setLED(bool state);
 void USARTwrite(char c);
 void clearTIM2Interrupt(void);
 
-// The good, old, global variable
+// The good, old, global variables
 bool ledStatus;
 int IRQsCounter;
 
+// Interrupt 15 handler
 void IRQ15(void) {
   ledStatus = !ledStatus;
   IRQsCounter++;
@@ -26,6 +30,7 @@ void IRQ15(void) {
 int main(void) {
   // Configure hardware
   initClock();
+  initCore();
   initGPIO();
   initUSART();
   initTIM2();

@@ -1,7 +1,7 @@
 #include <stdint.h>
 
 //extern unsigned int _stack_reset_value;
-const uint32_t RAM_END = 0x20001FFF;
+const uint32_t RAM_END = 0x20002000;
 
 // Forward declarations
 int main(void);

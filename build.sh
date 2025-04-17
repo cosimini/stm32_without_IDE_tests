@@ -4,7 +4,6 @@
 if not test -d "build"
   mkdir build
 end
-
 rm build/*
 
 # Flags explaination:
