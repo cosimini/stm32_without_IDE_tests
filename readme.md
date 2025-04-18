@@ -11,9 +11,10 @@ TODOs:
 - [X] Write a configuration for the clock hardware
 - [X] Try to configure a timer with an associated callback
 - [X] Try to use the serial interface
-- [ ] Use DMA controller
+- [ ] Use the external 24MHz XTAL and run the core at 64MHz
 - [ ] Write proper initialization
 - [ ] Use OpenOCD for debugging too
+- [ ] Use DMA controller
 
 ## Useful commands
  - st-util: Conect to the hardware and listen for gdb
