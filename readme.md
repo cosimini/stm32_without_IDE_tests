@@ -10,19 +10,14 @@ TODOs:
 - [X] Write a basis and simple hal for the GPIO
 - [X] Write a configuration for the clock hardware
 - [X] Try to configure a timer with an associated callback
-- [X] Try to use the serial interface
-- [ ] Use the external 24MHz XTAL and run the core at 64MHz
+- [X] Try to write to the serial interface
+- [ ] Receive from USART
 - [ ] Write proper initialization
 - [ ] Use OpenOCD for debugging too
 - [ ] Use DMA controller
 
-## Useful commands
- - st-util: Conect to the hardware and listen for gdb
- - arm-none-eabi-gdb build/output.o: Launch gdb with the pecified file as target
-
- Whithin the debugger:
- - target extended-remote :4242 -> Connect to st-lisk
- - load -> flash the memory
- - continue -> continue execution
- - p <var> -> print a variable
- - x/<size>[xc][wb] 0x20000xxx -> read chunk of memory
+## Useful stuff
+ - 'st-util': Connect to the debugger, GDB interface available on port 4242
+ - 'arm-none-eabi-gdb build/output.o': Launch gdb with the specified file as target
+    - 'target extended-remote :4242' : Connect to st-lisk
+    - 'load' : flash the target
