@@ -4,11 +4,11 @@
 
 #include "utils.h"
 
-#define RCC_OFFSET 0x40021000
-#define RCC_CFGR 0x0008
-#define RCC_IOPENR 0x0034
+#define RCC_OFFSET  0x40021000
+#define RCC_CFGR    0x0008
+#define RCC_IOPENR  0x0034
 #define RCC_ABPENR1 0x003C
-#define RCC_CCIPR 0x0054
+#define RCC_CCIPR   0x0054
 
 void initClock(void) {
   // RCC_CR
