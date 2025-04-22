@@ -26,6 +26,9 @@ void initUSART(void) {
   uint32_t* usart_brr_register = (uint32_t*) (USART2_OFFSET + USART2_BRR);
   *usart_brr_register = (*usart_brr_register & 0xffff0000) | 139;  // Prescaler: 16M / 139 ~= 115200
 
+  // TODO: USART2 receive interrupt
+  // TODO: USART2 receive buffer, DMA maybe?
+
   // Enable
   conf.reg = ((uint32_t*) (USART2_OFFSET + 0x0000));
   setConf(&conf, 0, 1);  // Enable USART2 after the configuration is done
