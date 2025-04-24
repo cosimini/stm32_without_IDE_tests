@@ -52,16 +52,17 @@ typedef enum {
 #define DMAMUX_RGSR  (DMA1_OFFSET + 0x140)
 #define DMAMUX_RGCFR (DMA1_OFFSET + 0x144)
 
-void initDMA(void, uint8_t* buf) {
+void initDMA(uint8_t* buf) {
   // Configure DMA
   // Channel 1 - Used for the USART communication
   *(uint32_t*) DMA1_CCR1 &= 0b0 << 4;  // DIR : Set direction to READ
+  //*(uint32_t*) DMA1_CCR1 |= 0b1 << 4;  // DIR : Set direction to WRITE
   // TODO: Use the interrupts, expecially for the transfer errors
   //*(uint32_t*) DMA1_CCR1 |= 0b1 << 3;  // TEIE : Enable transfer error interrupt
   //*(uint32_t*) DMA1_CCR1 |= 0b1 << 1;  // TCIE : Enable transfer complete interrupt
   *(uint32_t*) DMA1_CCR1 |= 0b1;  // EN : enable DMA controller
   *(uint32_t*) DMA1_CPAR1 = 0x40004428;  // CPAR : periferal address
-  *(uint32_t*) DMA1_CMAR1 = buf;
+  *(uint8_t**) DMA1_CMAR1 = buf;
 
   // Configure MUX
   //    - 52 : USART2 RX
