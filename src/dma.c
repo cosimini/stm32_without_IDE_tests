@@ -4,6 +4,8 @@
 
 #include <stdint.h>
 
+void resetInterrupt(int ch);
+
 typedef enum {
   GLOBAL,
   COMPLETE,
@@ -37,37 +39,20 @@ typedef enum {
 #define DMA1_CMAR5   (DMA1_OFFSET + 0x14 + (0x14 * (5 - 1)))
 
 #define DMAMUX_OFFSET 0x40020800
-#define DMAMUX_C0CR  (DMA1_OFFSET + (0x04 * 0))
-#define DMAMUX_C1CR  (DMA1_OFFSET + (0x04 * 1))
-#define DMAMUX_C2CR  (DMA1_OFFSET + (0x04 * 2))
-#define DMAMUX_C3CR  (DMA1_OFFSET + (0x04 * 3))
-#define DMAMUX_C4CR  (DMA1_OFFSET + (0x04 * 4))
-#define DMAMUX_C5CR  (DMA1_OFFSET + (0x04 * 5))
-#define DMAMUX_C6CR  (DMA1_OFFSET + (0x04 * 6))
-#define DMAMUX_CSR   (DMA1_OFFSET + 0x80)
-#define DMAMUX_CFR   (DMA1_OFFSET + 0x84)
-#define DMAMUX_RG0CR (DMA1_OFFSET + 0x100 + (0x04 * 0))
-#define DMAMUX_RG1CR (DMA1_OFFSET + 0x100 + (0x04 * 1))
-#define DMAMUX_RG2CR (DMA1_OFFSET + 0x100 + (0x04 * 2))
-#define DMAMUX_RGSR  (DMA1_OFFSET + 0x140)
-#define DMAMUX_RGCFR (DMA1_OFFSET + 0x144)
-
-void initDMA(uint8_t* buf) {
-  // Configure DMA
-  // Channel 1 - Used for the USART communication
-  *(uint32_t*) DMA1_CCR1 &= 0b0 << 4;  // DIR : Set direction to READ
-  //*(uint32_t*) DMA1_CCR1 |= 0b1 << 4;  // DIR : Set direction to WRITE
-  // TODO: Use the interrupts, expecially for the transfer errors
-  //*(uint32_t*) DMA1_CCR1 |= 0b1 << 3;  // TEIE : Enable transfer error interrupt
-  //*(uint32_t*) DMA1_CCR1 |= 0b1 << 1;  // TCIE : Enable transfer complete interrupt
-  *(uint32_t*) DMA1_CCR1 |= 0b1;  // EN : enable DMA controller
-  *(uint32_t*) DMA1_CPAR1 = 0x40004428;  // CPAR : periferal address
-  *(uint8_t**) DMA1_CMAR1 = buf;
-
-  // Configure MUX
-  //    - 52 : USART2 RX
-  //    - 53 : USART2 TX
-}
+#define DMAMUX_C0CR  (DMAMUX_OFFSET + (0x04 * 0))
+#define DMAMUX_C1CR  (DMAMUX_OFFSET + (0x04 * 1))
+#define DMAMUX_C2CR  (DMAMUX_OFFSET + (0x04 * 2))
+#define DMAMUX_C3CR  (DMAMUX_OFFSET + (0x04 * 3))
+#define DMAMUX_C4CR  (DMAMUX_OFFSET + (0x04 * 4))
+#define DMAMUX_C5CR  (DMAMUX_OFFSET + (0x04 * 5))
+#define DMAMUX_C6CR  (DMAMUX_OFFSET + (0x04 * 6))
+#define DMAMUX_CSR   (DMAMUX_OFFSET + 0x80)
+#define DMAMUX_CFR   (DMAMUX_OFFSET + 0x84)
+#define DMAMUX_RG0CR (DMAMUX_OFFSET + 0x100 + (0x04 * 0))
+#define DMAMUX_RG1CR (DMAMUX_OFFSET + 0x100 + (0x04 * 1))
+#define DMAMUX_RG2CR (DMAMUX_OFFSET + 0x100 + (0x04 * 2))
+#define DMAMUX_RGSR  (DMAMUX_OFFSET + 0x140)
+#define DMAMUX_RGCFR (DMAMUX_OFFSET + 0x144)
 
 int getDMAChannelStatus(int DMAChannel) {
   if(DMAChannel > 5 || DMAChannel < 0) return -1;
@@ -76,8 +61,31 @@ int getDMAChannelStatus(int DMAChannel) {
 
 void clearDMAInterruptFlags(int DMAChannel, int kind) {
   if(DMAChannel > 5 || DMAChannel < 0) return;
-  int mask;
+  resetInterrupt(9);
+  uint32_t mask;
   if(kind >= 5) mask = 0b1111;
   else mask = 0b1 << kind;
   *(uint32_t*) DMA1_IFCR = (mask << (4 * DMAChannel));
+  *(uint32_t*) DMAMUX_CFR &= ~(0b1 << DMAChannel);
+}
+
+void receiveDataUSART2(int size) {
+  *(uint32_t*) DMA1_CCR1 &= ~((uint32_t) 1);
+  clearDMAInterruptFlags(0, ALL);
+  *(uint32_t*) DMA1_CNDTR1 = (*(uint32_t*) DMA1_CNDTR1 & 0xffff0000) | ((uint32_t) size);  // Number of data transfers
+  *(uint32_t*) DMA1_CCR1 |= 0b1;
+}
+
+void initDMA(uint8_t* buf) {
+  // Configure DMA
+  // Channel 1 - Used for the USART communication
+  *(uint32_t*) DMA1_CCR1 |= 0b1 << 7;  // MINC : Memory increment
+  *(uint32_t*) DMA1_CCR1 &= ~(0b1 << 4);  // DIR : Set direction to READ
+  //*(uint32_t*) DMA1_CCR1 |= 0b1 << 3;  // TEIE : Enable transfer error interrupt TODO: Use this
+  *(uint32_t*) DMA1_CCR1 |= 0b1 << 1;  // TCIE : Enable transfer complete interrupt
+  *(uint32_t*) DMA1_CPAR1 = 0x40004424;  // CPAR : periferal address
+  *(uint32_t*) DMA1_CMAR1 = (uint32_t) buf;  // Used memory location
+
+  // Configure MUX
+  *(uint32_t*) DMAMUX_C0CR = 52;  // 52 is USART2 receive, 53 USART2 transmit
 }

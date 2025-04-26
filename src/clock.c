@@ -7,6 +7,7 @@
 #define RCC_OFFSET  0x40021000
 #define RCC_CFGR    0x08
 #define RCC_IOPENR  0x34
+#define RCC_AHBENR  0x38
 #define RCC_ABPENR1 0x3C
 #define RCC_CCIPR   0x54
 
@@ -32,6 +33,11 @@ void initClock(void) {
   conf.reg = (uint32_t*) (RCC_OFFSET + RCC_IOPENR);
   setConf(&conf, 0, 1); // PA, here USART2 is connected
   setConf(&conf, 2, 1); // PC, here the user LED is connected
+  applyConf(&conf);
+
+  // RCC_AHBENR
+  conf.reg = (uint32_t*) (RCC_OFFSET + RCC_AHBENR);
+  setConf(&conf, 0, 1); // DMA1 clock enable
   applyConf(&conf);
 
   // RCC_ABPENR1

@@ -7,6 +7,7 @@ const uint32_t RAM_END = 0x20002000;
 int main(void);
 void trap(void);
 void noop(void);
+void IRQ09(void);
 void IRQ15(void);
 
 // The vector table
@@ -36,13 +37,13 @@ uint32_t __attribute__((section(".reset_vector"))) isr_vector[] = {
   (uint32_t) noop,     // 22 - IRQ 6
   (uint32_t) noop,     // 23 - IRQ 7
   (uint32_t) noop,     // 24 - IRQ 8
-  (uint32_t) noop,     // 25 - IRQ 9
+  (uint32_t) IRQ09,    // 25 - IRQ 9  - DMA1 channel 1
   (uint32_t) noop,     // 26 - IRQ 10
   (uint32_t) noop,     // 27 - IRQ 11
   (uint32_t) noop,     // 28 - IRQ 12
   (uint32_t) noop,     // 29 - IRQ 13
   (uint32_t) noop,     // 30 - IRQ 14
-  (uint32_t) IRQ15,    // 31 - IRQ 15
+  (uint32_t) IRQ15,    // 31 - IRQ 15 - TIM2
   (uint32_t) noop,     // 32 - IRQ 16
   (uint32_t) noop,     // 33 - IRQ 17
   (uint32_t) noop,     // 34 - IRQ 18

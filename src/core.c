@@ -7,10 +7,11 @@
 #define NVIC_ICPR 0xE000E280
 
 void initCore(void) {
+  *(volatile uint32_t*) NVIC_ISER |= (1 << 9); // Enable IRQ 9
   *(volatile uint32_t*) NVIC_ISER |= (1 << 15); // Enable IRQ 15
 }
 
 void resetInterrupt(int IRQnumber) {  // Reset the specified interrupt
-  // TODO: Check that the target interrupt exists (i.e. in [0,31])
+  if(IRQnumber < 0 || IRQnumber > 31) return;
   *(volatile uint32_t*) NVIC_ISER = (1 << IRQnumber);
 }

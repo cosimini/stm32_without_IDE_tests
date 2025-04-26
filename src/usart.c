@@ -3,6 +3,7 @@
 
 #define USART2_OFFSET 0x40004400
 #define USART2_CR2 0x0004
+#define USART2_CR3 0x0008
 #define USART2_BRR 0x000C
 #define USART2_TDR 0x0028
 #define USART2_ISR 0x001C
@@ -22,15 +23,18 @@ void initUSART(void) {
   setConf(&conf, 11, 0); // Enable clock pin
   applyConf(&conf);
 
+  // USART2_CR3
+  conf.reg = (uint32_t*) (USART2_OFFSET + USART2_CR3);
+  setConf(&conf, 6, 1); // Enable DMA receive
+  applyConf(&conf);
+
   // USART2_BRR
   uint32_t* usart_brr_register = (uint32_t*) (USART2_OFFSET + USART2_BRR);
   *usart_brr_register = (*usart_brr_register & 0xffff0000) | 139;  // Prescaler: 16M / 139 ~= 115200
 
-  // TODO: USART2 receive interrupt
-  // TODO: USART2 receive buffer, DMA maybe?
-
   // Enable
   conf.reg = ((uint32_t*) (USART2_OFFSET + 0x0000));
+  setConf(&conf, 2, 1);  // Enable receiver
   setConf(&conf, 0, 1);  // Enable USART2 after the configuration is done
   applyConf(&conf);
 }
