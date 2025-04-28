@@ -14,6 +14,7 @@ TODOs:
 - [X] Receive from USART
 - [X] Use DMA controller
 - [ ] Write proper initialization, consistent and with a single, main, init call in the reset_handler
+- [ ] Use Makefile instead of bash scripts
 - [ ] Use OpenOCD for debugging too
 - [ ] Implement a delay() function using systick
 - [ ] Interface some other periferals, ADC and temperature sensor
