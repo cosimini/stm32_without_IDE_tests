@@ -11,13 +11,11 @@ TODOs:
 - [X] Write a configuration for the clock hardware
 - [X] Try to configure a timer with an associated callback
 - [X] Try to write to the serial interface
-- [ ] Receive from USART
-- [ ] Write proper initialization
+- [X] Receive from USART
+- [X] Use DMA controller
+- [ ] Write proper initialization, consistent and with a single, main, init call in the reset_handler
+- [ ] Use Makefile instead of bash scripts
 - [ ] Use OpenOCD for debugging too
-- [ ] Use DMA controller
-
-## Useful stuff
- - 'st-util': Connect to the debugger, GDB interface available on port 4242
- - 'arm-none-eabi-gdb build/output.o': Launch gdb with the specified file as target
-    - 'target extended-remote :4242' : Connect to st-lisk
-    - 'load' : flash the target
+- [ ] Implement a delay() function using systick
+- [ ] Interface some other periferals, ADC and temperature sensor
+- [ ] Try using sleep modes
