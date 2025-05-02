@@ -4,4 +4,6 @@
 
 void initTempSensor(void) {}
 
-double getTemperature(void) {}
+double getTemperature(void) {
+  return -1;
+}
