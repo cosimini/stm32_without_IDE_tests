@@ -7,15 +7,18 @@
 void initClock(void);
 void initCore(void);
 void initGPIO(void);
+void initADCs(void);
 void initUSART(void);
-void initTIM2(void);
 void initDMA(uint8_t* buf);
+void initTIM2(void);
 
 // Forward declaration of used functions
 void setLED(bool state);
 void USARTwrite(char c);
 void clearTIM2Interrupt(void);
 void receiveDataUSART2(int size);
+float getTemperature(void);
+uint32_t getDataADC(void);
 
 // The good, old, global variables
 bool ledStatus;
@@ -29,6 +32,7 @@ void IRQ09(void) {
   receiveDataUSART2(16);
   for(uint32_t k = 0; k < USART2_RX_BUFFER_SIZE; k++) {
     if(USART2_buffer[k] > 0) USARTwrite(USART2_buffer[k]);
+    USART2_buffer[k] = 0;
   }
   USARTwrite('\r');
   USARTwrite('\n');
@@ -39,8 +43,6 @@ void IRQ15(void) {
   ledStatus = !ledStatus;
   IRQsCounter++;
   setLED(ledStatus);
-  char message[] = "beep\r\n";
-  for(uint32_t k = 0; k < sizeof(message); k++) USARTwrite(message[k]);
   clearTIM2Interrupt();
 }
 
@@ -49,13 +51,15 @@ int main(void) {
   initClock();
   initCore();
   initGPIO();
+  initADCs();
   initUSART();
-  initTIM2();
   initDMA(USART2_buffer);
+  initTIM2();
   // Init global variables
   ledStatus = true;
   IRQsCounter = 0;
   for(int k = 0; k < USART2_RX_BUFFER_SIZE; k++) { USART2_buffer[k] = 0; }
+  SoCTemperature = 0;
   // Send greetings over usart
   char greet[] = "Hello, word!\r\n";
   for(uint32_t k = 0; k < sizeof(greet); k++) USARTwrite(greet[k]);

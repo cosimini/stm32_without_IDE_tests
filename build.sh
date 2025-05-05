@@ -21,10 +21,13 @@ rm build/*
 arm-none-eabi-gcc\
   src/*.c\
   -T src/link_src.ld\
+  -static \
   -Wall -Wextra -Werror -ggdb\
   -mcpu=cortex-m0plus\
   -mfloat-abi=soft -mthumb -nostdlib\
-  -o build/output.o
+  -o build/output.o \
+  -l:libgcc.a \
+  -L:/usr/lib/gcc/arm-none-eabi/9.3.0/
 
 #  Flags I'm not using
 #

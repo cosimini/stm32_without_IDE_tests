@@ -8,7 +8,8 @@
 #define RCC_CFGR    0x08
 #define RCC_IOPENR  0x34
 #define RCC_AHBENR  0x38
-#define RCC_ABPENR1 0x3C
+#define RCC_APBENR1 0x3C
+#define RCC_APBENR2 0x40
 #define RCC_CCIPR   0x54
 
 void initClock(void) {
@@ -40,10 +41,15 @@ void initClock(void) {
   setConf(&conf, 0, 1); // DMA1 clock enable
   applyConf(&conf);
 
-  // RCC_ABPENR1
-  conf.reg = (uint32_t*) (RCC_OFFSET + RCC_ABPENR1);
+  // RCC_APBENR1
+  conf.reg = (uint32_t*) (RCC_OFFSET + RCC_APBENR1);
   setConf(&conf,  0, 1); // Enable TIM2's clock
   setConf(&conf, 17, 1); // Enable USART2's clock
+  applyConf(&conf);
+
+  // RCC_APBENR2
+  conf.reg = (uint32_t*) (RCC_OFFSET + RCC_APBENR2);
+  setConf(&conf, 20, 1); // Enable ADC clock
   applyConf(&conf);
 
   // RCC_CCIPR

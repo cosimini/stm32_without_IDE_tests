@@ -19,3 +19,11 @@ Those values are located in the engineering bytes, in read only mode, and writte
 
 TS_CAL1:  30C -> 0x1fff75a8 - 0x1fff75a9
 TS_CAL2: 130C -> 0x1fff75ca - 0x1fff75cb
+
+
+## TODOs
+
+[ ] Write init for temperature sensor
+[X] Write init for the associated ADC
+[X] Enable clock for the associated ADC
+[X] Write the getTemperature function
