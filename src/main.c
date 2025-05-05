@@ -59,7 +59,6 @@ int main(void) {
   ledStatus = true;
   IRQsCounter = 0;
   for(int k = 0; k < USART2_RX_BUFFER_SIZE; k++) { USART2_buffer[k] = 0; }
-  SoCTemperature = 0;
   // Send greetings over usart
   char greet[] = "Hello, word!\r\n";
   for(uint32_t k = 0; k < sizeof(greet); k++) USARTwrite(greet[k]);
